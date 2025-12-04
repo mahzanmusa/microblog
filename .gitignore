@@ -39,6 +39,7 @@ venv.bak/
 # Project specific files (adjust as needed)
 db.sqlite3
 media/
+app.db
 
 # IDE and editor files
 .vscode/
