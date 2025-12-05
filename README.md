@@ -74,6 +74,16 @@ Setting up the environment:
     (venv) $ aiosmtpd -n -c aiosmtpd.handlers.Debugging -l localhost:8025
 ```
 
+14. Package for actual sending of emails ***
+```
+    (venv) $ pip install flask-mail
+```
+
+15. Password reset links have secure token. To generate these tokens, use JSON Web Tokens
+```
+    (venv) $ pip install pyjwt
+```
+
 
 Add Flask environment file .flaskenv
 ```
