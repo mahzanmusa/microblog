@@ -67,3 +67,9 @@ Setting up the environment:
 ```
     (venv) $ pip install email-validator
 ```
+
+13. SMTP debugging server & start a debugging email server
+```
+    (venv) $ pip install aiosmtpd
+    (venv) $ aiosmtpd -n -c aiosmtpd.handlers.Debugging -l localhost:8025
+```

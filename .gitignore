@@ -40,6 +40,7 @@ venv.bak/
 db.sqlite3
 media/
 app.db
+logs/
 
 # IDE and editor files
 .vscode/
