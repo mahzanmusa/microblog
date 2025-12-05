@@ -73,3 +73,10 @@ Setting up the environment:
     (venv) $ pip install aiosmtpd
     (venv) $ aiosmtpd -n -c aiosmtpd.handlers.Debugging -l localhost:8025
 ```
+
+
+Add Flask environment file .flaskenv
+FLASK_APP=microblog.py
+FLASK_DEBUG=0
+MAIL_SERVER=localhost
+MAIL_PORT=8025

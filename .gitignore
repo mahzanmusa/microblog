@@ -35,6 +35,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.flaskenv
 
 # Project specific files (adjust as needed)
 db.sqlite3
