@@ -110,6 +110,16 @@ Setting up the environment:
     (venv) $ flask translate compile
 ```
 
+19. Install language detection library
+```
+    (venv) $ pip install langdetect
+```
+
+20. Install HTTP Client for AJAX requests implementation
+```
+    (venv) $ pip install requests
+```
+
 Add Flask environment file .flaskenv
 ```
 FLASK_APP=microblog.py
