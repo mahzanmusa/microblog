@@ -89,6 +89,27 @@ Setting up the environment:
     (venv) $ pip install flask-moment
 ```
 
+17. Install Flask-Babel for Internationalization and Localization
+```
+    (venv) $ pip install flask-babel
+```
+
+18. Create translation .pot file, & create translation for <language-code>, & compile to format efficient used at run-time
+```
+    (venv) $ pybabel extract -F babel.cfg -k _l -o messages.pot .
+    (venv) $ pybabel init -i messages.pot -d app/translations -l <language-code>
+    (venv) $ pybabel compile -d app/translations
+
+    #To update translation file:
+    (venv) $ pybabel extract -F babel.cfg -k _l -o messages.pot .
+    (venv) $ pybabel update -i messages.pot -d app/translations
+
+    #Or use provided cli.py commands:
+    (venv) $ flask translate init <language-code>
+    (venv) $ flask translate update
+    (venv) $ flask translate compile
+```
+
 Add Flask environment file .flaskenv
 ```
 FLASK_APP=microblog.py

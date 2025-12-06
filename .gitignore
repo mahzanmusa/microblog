@@ -42,6 +42,8 @@ db.sqlite3
 media/
 app.db
 logs/
+messages.pot
+app/translations*
 
 # IDE and editor files
 .vscode/
