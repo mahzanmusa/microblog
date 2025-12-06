@@ -84,6 +84,10 @@ Setting up the environment:
     (venv) $ pip install pyjwt
 ```
 
+16. Install Flask-Moment, for date and time rendering
+```
+    (venv) $ pip install flask-moment
+```
 
 Add Flask environment file .flaskenv
 ```
