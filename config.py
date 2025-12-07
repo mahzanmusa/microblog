@@ -18,4 +18,7 @@ class Config:
     LANGUAGES = ['en', 'es']
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
     MS_TRANSLATOR_REGION = os.environ.get('MS_TRANSLATOR_REGION')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION')
     POSTS_PER_PAGE = 25
