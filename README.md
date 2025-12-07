@@ -29,6 +29,11 @@ Tutorial from [https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part
     (venv) $ pip install -r requirements.txt
 ```
 
+Update requirements.txt file (if there's any changes)
+```
+    (venv) $ pip freeze > requirements.txt
+```
+
 ### Method 2: Installing packages one by one:
 1.  Install Flask
 ```
@@ -128,6 +133,11 @@ Tutorial from [https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part
     (venv) $ pip install requests
 ```
 
+18. Install boto3 library, official AWS SDK for Python. For AWS language translation service 
+```
+     (venv) $ pip install boto3
+```
+
 ## Add Flask environment file .flaskenv
 ```
 FLASK_APP=microblog.py
@@ -139,5 +149,9 @@ FLASK_DEBUG=0
 SECRET_KEY=a-really-long-and-unique-key-that-nobody-knows
 MAIL_SERVER=localhost
 MAIL_PORT=8025
-MS_TRANSLATOR_KEY=<your-translator-key>
+MS_TRANSLATOR_KEY=<your-azure-translator-key>
+MS_TRANSLATOR_REGION=<your-azure-region>
+AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
+AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
+AWS_DEFAULT_REGION=<your-aws-region>
 ```
