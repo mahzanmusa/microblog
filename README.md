@@ -87,7 +87,7 @@ Update requirements.txt file (if there's any changes)
     (venv) $ aiosmtpd -n -c aiosmtpd.handlers.Debugging -l localhost:8025
 ```
 
-11. Package for actual sending of emails ***
+11. Package for actual sending of emails
 ```
     (venv) $ pip install flask-mail
 ```
