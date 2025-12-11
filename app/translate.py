@@ -7,8 +7,8 @@ import json
 
 def translate(text, source_language, dest_language):
     # You can switch between translation services by commenting/uncommenting the desired line
-    return translate_ms(text, source_language, dest_language)
-    #return translate_aws(text, source_language, dest_language)
+    #return translate_ms(text, source_language, dest_language)
+    return translate_aws(text, source_language, dest_language)
 
 def translate_ms(text, source_language, dest_language):
     if 'MS_TRANSLATOR_KEY' not in current_app.config or not current_app.config['MS_TRANSLATOR_KEY']:
