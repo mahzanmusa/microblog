@@ -5,8 +5,10 @@ $ sudo yum -y update
 $ sudo yum -y install python3.13
 $ sudo yum -y install python3-devel
 $ sudo yum -y install postfix nginx git
-$ sudo yum install python3-pip -y
-$ pip3 install supervisor
+$ sudo yum -y install python3-pip
+
+####### Not needed
+#######$ pip3 install supervisor
 
 $ git clone https://github.com/mahzanmusa/microblog.git
 $ cd microblog
@@ -15,7 +17,8 @@ $ source venv/bin/activate
 (venv) $ pip install -r requirements.txt
 (venv) $ pip install gunicorn pymysql cryptography
 
-(venv) $ gunicorn -b localhost:8000 -w 4 microblog:app
+####### Not needed
+####### (venv) $ gunicorn -b localhost:8000 -w 4 microblog:app
 '''
 
 '''
