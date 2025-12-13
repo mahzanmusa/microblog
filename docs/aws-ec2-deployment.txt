@@ -70,11 +70,11 @@ User=ec2-user
 Group=nginx
 
 # The output from the 'pwd' command you ran earlier
-WorkingDirectory=/home/ec2-user/microblog    # <--- UPDATE THIS
+WorkingDirectory=/home/ec2-user/microblog
 
 # The specific path to the gunicorn executable you found with 'which gunicorn'
 # IMPORTANT: Ensure the bind address (127.0.0.1:8000) matches your Nginx config!
-ExecStart=/home/ec2-user/microblog/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 wsgi:app  # <--- UPDATE PATH
+ExecStart=/home/ec2-user/microblog/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 microblog:app
 
 Restart=always
 
