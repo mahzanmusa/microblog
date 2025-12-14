@@ -4,8 +4,13 @@ from flask_babel import _
 import boto3
 import json
 
-'''
+
 def translate(text, source_language, dest_language):
+    # You can switch between translation services by commenting/uncommenting the desired line
+    #return translate_ms(text, source_language, dest_language)
+    return translate_aws(text, source_language, dest_language)
+
+def translate_ms(text, source_language, dest_language):
     if 'MS_TRANSLATOR_KEY' not in current_app.config or not current_app.config['MS_TRANSLATOR_KEY']:
         return _('Error: the translation service is not configured.')
     auth = {
@@ -20,11 +25,11 @@ def translate(text, source_language, dest_language):
     if r.status_code != 200:
         return _('Error: the translation service failed.')
     
-    print(r.json()[0]['translations'][0]['text'])
+    #print(r.json()[0]['translations'][0]['text'])
     return r.json()[0]['translations'][0]['text']
-'''
 
-def translate(text, source_language, dest_language):
+
+def translate_aws(text, source_language, dest_language):
     # Configure the AWS region (change to your desired region, e.g., 'us-east-1')
     region = current_app.config['AWS_DEFAULT_REGION'] 
     service_name = 'translate'
