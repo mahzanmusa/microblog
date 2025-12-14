@@ -11,7 +11,20 @@ $ sudo yum -y install python3-pip
 #######$ pip3 install supervisor
 
 $ git clone https://github.com/mahzanmusa/microblog.git
+
 $ cd microblog
+
+# Create .env file
+SECRET_KEY=<your-secret-key-for-forms>
+MAIL_SERVER=localhost
+MAIL_PORT=8025
+DATABASE_URL=mysql+pymysql://<db-username>:<db-password>@<db-url>:3306/<db-name>
+MS_TRANSLATOR_KEY=<ms-azure-translator-key>
+MS_TRANSLATOR_REGION=<ms-azure-region>
+AWS_ACCESS_KEY_ID=<aws-access-key-id>
+AWS_SECRET_ACCESS_KEY=<aws-secret-access-key>
+AWS_DEFAULT_REGION=<aws-region>
+
 $ python3.13 -m venv venv
 $ source venv/bin/activate
 (venv) $ pip install -r requirements.txt
@@ -19,6 +32,7 @@ $ source venv/bin/activate
 
 ####### Not needed
 ####### (venv) $ gunicorn -b localhost:8000 -w 4 microblog:app
+
 '''
 
 '''
