@@ -1,11 +1,7 @@
 EC2 OS - Amazon Linux 2023
 
 '''
-$ sudo yum -y update
-$ sudo yum -y install python3.13
-$ sudo yum -y install python3-devel
-$ sudo yum -y install postfix nginx git
-$ sudo yum -y install python3-pip
+$ sudo yum -y install python3.13 python3-devel postfix nginx git python3-pip
 
 ####### Not needed
 #######$ pip3 install supervisor
@@ -32,6 +28,9 @@ $ source venv/bin/activate
 
 ####### Not needed
 ####### (venv) $ gunicorn -b localhost:8000 -w 4 microblog:app
+
+# Create database
+(venv) $ flask db upgrade
 
 '''
 
