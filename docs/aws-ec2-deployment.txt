@@ -3,9 +3,6 @@ EC2 OS - Amazon Linux 2023
 '''
 $ sudo yum -y install python3.13 python3-devel postfix nginx git python3-pip
 
-####### Not needed
-#######$ pip3 install supervisor
-
 $ git clone https://github.com/mahzanmusa/microblog.git
 
 $ cd microblog
@@ -26,47 +23,61 @@ $ source venv/bin/activate
 (venv) $ pip install -r requirements.txt
 (venv) $ pip install gunicorn pymysql cryptography
 
-####### Not needed
-####### (venv) $ gunicorn -b localhost:8000 -w 4 microblog:app
-
 # Create database
 (venv) $ flask db upgrade
+'''
 
+Create SSL Certificate in AWS EC2
+'''
+$ sudo mkdir /etc/nginx/ssl
+
+$ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/nginx/ssl/selfsigned.key \
+-out /etc/nginx/ssl/selfsigned.crt
+
+# Common Name (CN): Paste your AWS address here
 '''
 
 '''
-# Check nginx status:
-$ sudo systemctl status nginx
-
-# Check if locally running:
-$ curl -I http://localhost:8000
-
 #update nginx config file. Comment out existing port 80/443 listening
 $ sudo nano /etc/nginx/nginx.conf
 
+server {
+    listen 80;
+    listen [::]:80;
+    server_name _;  # Or your specific AWS address
+
+    # THIS IS THE REDIRECT LINE
+    return 301 https://$host$request_uri;
+}
 
 server {
-    listen       80;
-    listen       [::]:80;
-    
-    # COMMENT OUT or REMOVE the 'root' line if you want to be safe
-    # root         /usr/share/nginx/html;
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name _;  # Or your AWS address
 
-    # Load configuration files for the default server block.
-    include /etc/nginx/default.d/*.conf;
+    # The SSL Keys you just made
+    ssl_certificate /etc/nginx/ssl/selfsigned.crt;
+    ssl_certificate_key /etc/nginx/ssl/selfsigned.key;
 
+    # Proxy settings (Same as your HTTP block)
     location / {
-        # THIS IS THE IMPORTANT PART
-        proxy_pass http://127.0.0.1:8000; # Ensure this matches your Gunicorn port
+        proxy_pass http://127.0.0.1:8000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # Crucial: Tell Flask it's running over HTTPS
+        proxy_set_header X-Forwarded-Proto https;
     }
 }
 
 # test and reload nginx
 $ sudo nginx -t
-$ sudo systemctl reload nginx
+$ sudo systemctl restart nginx
+
+# Check nginx status:
+$ sudo systemctl status nginx
 '''
 
 '''
