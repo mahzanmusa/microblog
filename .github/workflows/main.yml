@@ -37,6 +37,9 @@ jobs:
             # Install dependencies
             pip install -r requirements.txt
 
+            # Restart nginx
+            sudo systemctl restart nginx
+            
             # Restart the app (example using systemd)
             sudo systemctl restart microblog
             
