@@ -1,0 +1,43 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            # Stop the app (if you have a service set up)
+            # sudo systemctl stop myapp
+
+            # Navigate to the app directory
+            ###cd /home/ubuntu/app_folder
+
+            # Pull the latest changes from main
+            git pull origin main
+
+            # Activate virtual environment (create one if you haven't)
+            python3 -m venv venv
+            source venv/bin/activate
+
+            # Install dependencies
+            pip install -r requirements.txt
+
+            # Restart the app (example using systemd)
+            # sudo systemctl restart myapp
+            
+            echo "Deployment successful!"
