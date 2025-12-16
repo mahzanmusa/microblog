@@ -22,7 +22,7 @@ jobs:
           port: 22
           script: |
             # Stop the app (if you have a service set up)
-            # sudo systemctl stop myapp
+            sudo systemctl stop microblog
 
             # Navigate to the app directory
             ###cd /home/ubuntu/app_folder
@@ -38,6 +38,6 @@ jobs:
             pip install -r requirements.txt
 
             # Restart the app (example using systemd)
-            # sudo systemctl restart myapp
+            sudo systemctl restart microblog
             
             echo "Deployment successful!"
