@@ -37,6 +37,9 @@ jobs:
             # Install dependencies
             pip install -r requirements.txt
 
+            # Upgrade database
+            flask db upgrade
+
             # Restart nginx
             sudo systemctl restart nginx
             
