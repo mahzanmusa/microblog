@@ -41,7 +41,8 @@ jobs:
             flask db upgrade
 
             # Update translation
-            flask translate update
+            ###Disable for now since it's throwing error.
+            ###flask translate update
 
             # Restart nginx
             sudo systemctl restart nginx
