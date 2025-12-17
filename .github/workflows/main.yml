@@ -25,13 +25,13 @@ jobs:
             sudo systemctl stop microblog
 
             # Navigate to the app directory
-            ###cd /home/ubuntu/app_folder
+            cd microblog
 
             # Pull the latest changes from main
             git pull origin main
 
             # Activate virtual environment (create one if you haven't)
-            python3 -m venv venv
+            python3.13 -m venv venv
             source venv/bin/activate
 
             # Install dependencies
@@ -41,7 +41,7 @@ jobs:
             flask db upgrade
 
             # Update translation
-            #####flask translate update
+            flask translate update
 
             # Restart nginx
             sudo systemctl restart nginx
