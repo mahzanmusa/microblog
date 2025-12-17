@@ -40,6 +40,9 @@ jobs:
             # Upgrade database
             flask db upgrade
 
+            # Update translation
+            #####flask translate update
+
             # Restart nginx
             sudo systemctl restart nginx
             

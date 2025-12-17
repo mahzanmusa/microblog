@@ -9,8 +9,7 @@ from app.models import User
 
 class EditProfileForm(FlaskForm):
     username = StringField(_l('Username'), validators=[DataRequired()])
-    about_me = TextAreaField(_l('About me'),
-                             validators=[Length(min=0, max=140)])
+    about_me = TextAreaField(_l('About me'), validators=[Length(min=0, max=140)])
     submit = SubmitField(_l('Submit'))
 
     def __init__(self, original_username, *args, **kwargs):
@@ -19,8 +18,7 @@ class EditProfileForm(FlaskForm):
 
     def validate_username(self, username):
         if username.data != self.original_username:
-            user = db.session.scalar(sa.select(User).where(
-                User.username == username.data))
+            user = db.session.scalar(sa.select(User).where(User.username == username.data))
             if user is not None:
                 raise ValidationError(_('Please use a different username.'))
 
@@ -30,6 +28,10 @@ class EmptyForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    post = TextAreaField(_l('Say something'), validators=[
-        DataRequired(), Length(min=1, max=140)])
+    post = TextAreaField(_l('Say something'), validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField(_l('Submit'))
+
+
+class MessageForm(FlaskForm):
+    message = TextAreaField(_l('Message'), validators=[DataRequired(), Length(min=0, max=140)])
     submit = SubmitField(_l('Submit'))
