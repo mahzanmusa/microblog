@@ -37,6 +37,15 @@ jobs:
             # Install dependencies
             pip install -r requirements.txt
 
+            # Upgrade database
+            flask db upgrade
+
+            # Update translation
+            #####flask translate update
+
+            # Restart nginx
+            sudo systemctl restart nginx
+            
             # Restart the app (example using systemd)
             sudo systemctl restart microblog
             
