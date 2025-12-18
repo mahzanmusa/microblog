@@ -139,19 +139,18 @@ Update requirements.txt file (if there's any changes)
 ```
 
 ## Add Flask environment file .flaskenv
-```
-FLASK_APP=microblog.py
-FLASK_DEBUG=0
-```
+    FLASK_APP=microblog.py
+    FLASK_DEBUG=0
 
 ## Add environment file .env
-```
-SECRET_KEY=a-really-long-and-unique-key-that-nobody-knows
-MAIL_SERVER=localhost
-MAIL_PORT=8025
-MS_TRANSLATOR_KEY=<your-azure-translator-key>
-MS_TRANSLATOR_REGION=<your-azure-region>
-AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
-AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
-AWS_DEFAULT_REGION=<your-aws-region>
-```
+    SECRET_KEY=a-really-long-and-unique-key-that-nobody-knows
+    MAIL_SERVER=localhost
+    MAIL_PORT=8025
+    MS_TRANSLATOR_KEY=<your-azure-translator-key>
+    MS_TRANSLATOR_REGION=<your-azure-region>
+    AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
+    AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
+    AWS_DEFAULT_REGION=<your-aws-region>
+
+## Unit Tests
+    python -m unittest tests/test_general.py
