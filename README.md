@@ -138,6 +138,11 @@ Update requirements.txt file (if there's any changes)
      (venv) $ pip install boto3
 ```
 
+19. Install celery for message queue using AWS SQS 
+```
+     (venv) $ pip install celery[sqs]
+```
+
 ## Add Flask environment file .flaskenv
     FLASK_APP=microblog.py
     FLASK_DEBUG=0

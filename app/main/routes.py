@@ -9,6 +9,7 @@ from app.main.forms import EditProfileForm, EmptyForm, PostForm, MessageForm
 from app.models import User, Post, Message, Notification
 from app.translate import translate
 from app.main import bp
+from app.tasks import example_background_task  # app/routes.py
 
 
 @bp.before_app_request
@@ -201,3 +202,10 @@ def notifications():
     query = current_user.notifications.select().where(Notification.timestamp > since).order_by(Notification.timestamp.asc())
     notifications = db.session.scalars(query)
     return [{'name': n.name, 'data': n.get_data(), 'timestamp': n.timestamp} for n in notifications]
+
+
+@bp.route('/start-job')
+def start_job():
+    # .delay() is the Celery method to send to background
+    example_background_task.delay(10) 
+    return "Job sent to background!"

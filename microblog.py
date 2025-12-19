@@ -1,3 +1,10 @@
+import os
+
+# --- CRITICAL FIX: Kill the zombie variable before anything else loads ---
+if 'CELERY_RESULT_BACKEND' in os.environ:
+    del os.environ['CELERY_RESULT_BACKEND']
+# -----------------------------------------------------------------------
+
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import create_app, db

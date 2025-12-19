@@ -46,6 +46,8 @@ def create_app(config_class=Config):
     from app.cli import bp as cli_bp
     app.register_blueprint(cli_bp)
 
+    from app import tasks  # Import tasks to register them
+
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
             auth = None
