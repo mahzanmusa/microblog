@@ -22,10 +22,7 @@ class Config:
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_DEFAULT_REGION = os.environ.get('AWS_DEFAULT_REGION')
 
-    # Broker defaults to SQS
-    CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'sqs://'
-    # Backend explicitly None (SQS cannot be a backend)
-    CELERY_RESULT_BACKEND = None
-    CELERY_TASK_DEFAULT_QUEUE = 'microblog-queue'
+    CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'redis://localhost:6379/0'
+    CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND') or 'redis://localhost:6379/0'
 
     POSTS_PER_PAGE = 25

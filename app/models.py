@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from app import db, login
 import json
+from celery.result import AsyncResult
 
 followers = sa.Table(
     'followers',
@@ -47,6 +48,8 @@ class User(UserMixin, db.Model):
     
     notifications: so.WriteOnlyMapped['Notification'] = so.relationship(
         back_populates='user')
+    
+    tasks: so.WriteOnlyMapped['Task'] = so.relationship(back_populates='user')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -171,3 +174,26 @@ class Notification(db.Model):
 
     def get_data(self):
         return json.loads(str(self.payload_json))
+
+
+class Task(db.Model):
+    id: so.Mapped[str] = so.mapped_column(sa.String(36), primary_key=True)
+    name: so.Mapped[str] = so.mapped_column(sa.String(128), index=True)
+    description: so.Mapped[Optional[str]] = so.mapped_column(sa.String(128))
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id))
+    complete: so.Mapped[bool] = so.mapped_column(default=False)
+
+    user: so.Mapped[User] = so.relationship(back_populates='tasks')
+
+    def get_celery_job(self):
+        app = current_app.extensions['celery']
+        job = AsyncResult(self.id, app=app)
+        if job.status == 'PENDING' and not job.date_done:
+        # It *might* be missing, or it might just be waiting in the queue.
+        # In Celery, we typically just return the object anyway.
+            pass
+        return job
+
+    def get_progress(self):
+        job = self.get_celery_job()
+        return job.meta.get('progress', 0) if job is not None else 100
