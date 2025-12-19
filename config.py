@@ -26,5 +26,6 @@ class Config:
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'sqs://'
     # Backend explicitly None (SQS cannot be a backend)
     CELERY_RESULT_BACKEND = None
+    CELERY_TASK_DEFAULT_QUEUE = 'microblog-queue'
 
     POSTS_PER_PAGE = 25
