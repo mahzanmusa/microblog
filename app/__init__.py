@@ -9,6 +9,8 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from config import Config
+from redis import Redis
+from celery import Celery
 
 def get_locale():
     return request.accept_languages.best_match(current_app.config['LANGUAGES'])
@@ -46,7 +48,9 @@ def create_app(config_class=Config):
     from app.cli import bp as cli_bp
     app.register_blueprint(cli_bp)
 
-    from app import tasks  # Import tasks to register them
+    #from app import tasks  # Import tasks to register them
+    app.redis = Redis.from_url(app.config['CELERY_BROKER_URL'])
+    app.task_queue = Celery('microblog-tasks', broker=app.redis)
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:

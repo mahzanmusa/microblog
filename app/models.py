@@ -46,8 +46,7 @@ class User(UserMixin, db.Model):
     messages_received: so.WriteOnlyMapped['Message'] = so.relationship(
         foreign_keys='Message.recipient_id', back_populates='recipient')
     
-    notifications: so.WriteOnlyMapped['Notification'] = so.relationship(
-        back_populates='user')
+    notifications: so.WriteOnlyMapped['Notification'] = so.relationship(back_populates='user')
     
     tasks: so.WriteOnlyMapped['Task'] = so.relationship(back_populates='user')
 
@@ -77,13 +76,11 @@ class User(UserMixin, db.Model):
         return db.session.scalar(query) is not None
 
     def followers_count(self):
-        query = sa.select(sa.func.count()).select_from(
-            self.followers.select().subquery())
+        query = sa.select(sa.func.count()).select_from(self.followers.select().subquery())
         return db.session.scalar(query)
 
     def following_count(self):
-        query = sa.select(sa.func.count()).select_from(
-            self.following.select().subquery())
+        query = sa.select(sa.func.count()).select_from(self.following.select().subquery())
         return db.session.scalar(query)
 
     def following_posts(self):
@@ -124,6 +121,20 @@ class User(UserMixin, db.Model):
         n = Notification(name=name, payload_json=json.dumps(data), user=self)
         db.session.add(n)
         return n
+    
+    def launch_task(self, name, description, *args, **kwargs):
+        rq_job = current_app.task_queue.enqueue(f'app.tasks.{name}', self.id, *args, **kwargs)
+        task = Task(id=rq_job.get_id(), name=name, description=description, user=self)
+        db.session.add(task)
+        return task
+
+    def get_tasks_in_progress(self):
+        query = self.tasks.select().where(Task.complete == False)
+        return db.session.scalars(query)
+
+    def get_task_in_progress(self, name):
+        query = self.tasks.select().where(Task.name == name, Task.complete == False)
+        return db.session.scalar(query)
 
 
 @login.user_loader

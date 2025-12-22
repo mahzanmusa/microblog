@@ -9,7 +9,6 @@ from app.main.forms import EditProfileForm, EmptyForm, PostForm, MessageForm
 from app.models import User, Post, Message, Notification
 from app.translate import translate
 from app.main import bp
-from app.tasks import example_background_task  # app/routes.py
 
 
 @bp.before_app_request
@@ -204,8 +203,12 @@ def notifications():
     return [{'name': n.name, 'data': n.get_data(), 'timestamp': n.timestamp} for n in notifications]
 
 
-@bp.route('/start-job')
-def start_job():
-    # .delay() is the Celery method to send to background
-    example_background_task.delay(10) 
-    return "Job sent to background!"
+@bp.route('/export_posts')
+@login_required
+def export_posts():
+    if current_user.get_task_in_progress('export_posts'):
+        flash(_('An export task is currently in progress'))
+    else:
+        current_user.launch_task('export_posts', _('Exporting posts...'))
+        db.session.commit()
+    return redirect(url_for('main.user', username=current_user.username))
