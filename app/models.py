@@ -209,4 +209,19 @@ class Task(db.Model):
 
     def get_progress(self):
         job = self.get_celery_job()
-        return job.meta.get('progress', 0) if job is not None else 100
+        #return job.meta.get('progress', 0) if job is not None else 100
+
+        # If the job ID is missing, assume it finished long ago
+        if job is None:
+            return 100
+            
+        # In Celery, 'info' is only a dictionary when we explicitly set state='PROGRESS'
+        if job.state == 'PROGRESS':
+            return job.info.get('progress', 0)
+            
+        # If the task completed successfully, it is 100% done
+        if job.state == 'SUCCESS':
+            return 100
+            
+        # If PENDING, FAILURE, or RETRY, progress is 0
+        return 0

@@ -138,9 +138,10 @@ Update requirements.txt file (if there's any changes)
      (venv) $ pip install boto3
 ```
 
-19. Install celery for message queue using AWS SQS 
+19. Install celery for message queue using Redis. Then running the Celery worker 
 ```
-     (venv) $ pip install celery[sqs]
+     (venv) $ pip install celery[redis]
+     (venv) $ celery -A celery_worker.celery worker --loglevel=info --pool=solo
 ```
 
 ## Add Flask environment file .flaskenv

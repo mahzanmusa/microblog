@@ -30,7 +30,7 @@ def _set_task_progress(progress):
             task.complete = True
         db.session.commit()
 
-
+@shared_task
 def export_posts(user_id):
     try:
         user = db.session.get(User, user_id)
