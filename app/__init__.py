@@ -52,6 +52,10 @@ def create_app(config_class=Config):
     app.redis = Redis.from_url(app.config['CELERY_BROKER_URL'])
     app.task_queue = Celery('microblog-tasks', broker=app.redis)
 
+    # Initialize Celery and attach it to the app
+    #from app.celery_utils import make_celery
+    #app.celery = make_celery(app)  # <--- THIS LINE IS REQUIRED
+
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
             auth = None
