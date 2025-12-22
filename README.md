@@ -156,6 +156,8 @@ Update requirements.txt file (if there's any changes)
     AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
     AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
     AWS_DEFAULT_REGION=<your-aws-region>
+    CELERY_BROKER_URL=<message-broker-url>
+    CELERY_RESULT_BACKEND=<message-broker-backend>
 
 ## Unit Tests
     python -m unittest tests/test_general.py

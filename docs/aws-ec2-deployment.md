@@ -17,6 +17,8 @@
     AWS_ACCESS_KEY_ID=<aws-access-key-id>
     AWS_SECRET_ACCESS_KEY=<aws-secret-access-key>
     AWS_DEFAULT_REGION=<aws-region>
+    CELERY_BROKER_URL=<message-broker-url>
+    CELERY_RESULT_BACKEND=<message-broker-backend>
 
 ## Run in virtual environment, install components
     $ python3.13 -m venv venv
