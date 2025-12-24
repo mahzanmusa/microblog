@@ -144,6 +144,12 @@ Update requirements.txt file (if there's any changes)
      (venv) $ celery -A celery_worker.celery worker --loglevel=info --pool=solo
 ```
 
+20. Install ElasticSearch, for full-text search
+```
+    (venv) $ pip install opensearch-py
+```
+
+
 ## Add Flask environment file .flaskenv
     FLASK_APP=microblog.py
     FLASK_DEBUG=0
