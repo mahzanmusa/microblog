@@ -7,7 +7,8 @@
     $ docker run --name elasticsearch -d -p 9200:9200 -e "cluster.name=docker-cluster" -e "node.name=opensearch-node1" -e "cluster.initial_master_nodes=opensearch-node1" -e "plugins.security.disabled=true" -e "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" opensearchproject/opensearch:1.3.16
 
 ## Reindex the Post table
-    $ flask shell
+    $ source venv/bin/activate
+    (venv) $ flask shell
     >>> from app.models import Post
     >>> Post.reindex()
     >>> exit()

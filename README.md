@@ -156,7 +156,7 @@ Update requirements.txt file (if there's any changes)
 
 ## Add environment file .env
     SECRET_KEY=a-really-long-and-unique-key-that-nobody-knows
-    MAIL_SERVER=localhost
+    MAIL_SERVER=<your-smtp-server>
     MAIL_PORT=8025
     MS_TRANSLATOR_KEY=<your-azure-translator-key>
     MS_TRANSLATOR_REGION=<your-azure-region>
@@ -165,6 +165,8 @@ Update requirements.txt file (if there's any changes)
     AWS_DEFAULT_REGION=<your-aws-region>
     CELERY_BROKER_URL=<message-broker-url>
     CELERY_RESULT_BACKEND=<message-broker-backend>
+    OPENSEARCH_URL=<your-opensearch-url>
+    OPENSEARCH_PORT=9200
 
 ## Unit Tests
     python -m unittest tests/test_general.py

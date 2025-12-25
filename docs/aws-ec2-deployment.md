@@ -9,7 +9,7 @@
 
 ## Create .env file
     SECRET_KEY=<your-secret-key-for-forms>
-    MAIL_SERVER=localhost
+    MAIL_SERVER=<your-smtp-server>
     MAIL_PORT=8025
     DATABASE_URL=mysql+pymysql://<db-username>:<db-password>@<db-url>:3306/<db-name>
     MS_TRANSLATOR_KEY=<ms-azure-translator-key>
@@ -19,6 +19,8 @@
     AWS_DEFAULT_REGION=<aws-region>
     CELERY_BROKER_URL=<message-broker-url>
     CELERY_RESULT_BACKEND=<message-broker-backend>
+    OPENSEARCH_URL=<your-opensearch-url>
+    OPENSEARCH_PORT=9200
 
 ## Run in virtual environment, install components
     $ python3.13 -m venv venv
