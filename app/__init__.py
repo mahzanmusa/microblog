@@ -10,7 +10,7 @@ from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from config import Config
 from app.celery_utils import make_celery
-from opensearchpy import OpenSearch
+from opensearchpy import OpenSearch, RequestsHttpConnection
 
 def get_locale():
     return request.accept_languages.best_match(current_app.config['LANGUAGES'])
@@ -57,15 +57,47 @@ def create_app(config_class=Config):
     celery = make_celery(app)
     app.extensions['celery'] = celery
     app.celery = celery
+
+    if app.config['OPENSEARCH_URL']:
+        # 1. Default auth to None (Safe for local dev without auth)
+        auth = None 
+        
+        # 2. Check if we are running in "AWS Mode"
+        # We check if OPENSEARCH_SERVICE is set (e.g., 'aoss' or 'es')
+        if app.config.get('OPENSEARCH_SERVICE'):
+            try:
+                # Only import boto3 if we actually need it
+                import boto3
+                from opensearchpy import AWSV4SignerAuth
+                
+                credentials = boto3.Session().get_credentials()
+                region = boto3.Session().region_name
+                service = app.config['OPENSEARCH_SERVICE']
+                
+                # Overwrite 'auth' with the AWS Signer
+                auth = AWSV4SignerAuth(credentials, region, service)
+            except Exception as e:
+                app.logger.warning(f"Failed to setup AWS Auth: {e}")
+                # auth remains None here, or you could raise an error
+
+        # 3. Initialize the Client
+        app.opensearchpy = OpenSearch(
+            hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
+            http_auth=auth, # <--- Works if this is None OR AWSV4SignerAuth
+            use_ssl=str_to_bool(app.config['OPENSEARCH_USE_SSL']),     
+            verify_certs=str_to_bool(app.config['OPENSEARCH_VERIFY_CERTS']),
+            connection_class=RequestsHttpConnection,
+            timeout=60
+        )
    
-    app.opensearchpy = OpenSearch(
-        hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
-        http_compress=True,
-        use_ssl=str_to_bool(app.config['OPENSEARCH_USE_SSL']),     
-        verify_certs=str_to_bool(app.config['OPENSEARCH_VERIFY_CERTS']),
-        http_auth=app.config['OPENSEARCH_HTTP_AUTH']      
-        ) \
-        if app.config['OPENSEARCH_URL'] else None
+  #  app.opensearchpy = OpenSearch(
+   #     hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
+   #     http_compress=True,
+   #     use_ssl=str_to_bool(app.config['OPENSEARCH_USE_SSL']),     
+   #     verify_certs=str_to_bool(app.config['OPENSEARCH_VERIFY_CERTS']),
+   #     http_auth=app.config['OPENSEARCH_HTTP_AUTH']      
+   #     ) \
+   #     if app.config['OPENSEARCH_URL'] else None
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:

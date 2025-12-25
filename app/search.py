@@ -6,7 +6,8 @@ def add_to_index(index, model):
     payload = {}
     for field in model.__searchable__:
         payload[field] = getattr(model, field)
-    current_app.opensearchpy.index(index=index, body=payload, id=model.id, refresh=True)
+    #current_app.opensearchpy.index(index=index, body=payload, id=model.id, refresh=True)
+    current_app.opensearchpy.index(index=index, body=payload, id=model.id)
 
 def remove_from_index(index, model):
     if not current_app.opensearchpy:

@@ -20,7 +20,10 @@
     CELERY_BROKER_URL=<message-broker-url>
     CELERY_RESULT_BACKEND=<message-broker-backend>
     OPENSEARCH_URL=<your-opensearch-url>
-    OPENSEARCH_PORT=9200
+    OPENSEARCH_PORT=443
+    OPENSEARCH_USE_SSL=True
+    OPENSEARCH_VERIFY_CERTS=True
+    OPENSEARCH_SERVICE=aoss
 
 ## Run in virtual environment, install components
     $ python3.13 -m venv venv
