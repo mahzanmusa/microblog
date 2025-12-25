@@ -22,6 +22,13 @@ try:
         id=1,
         refresh=True
     )
+
+    response = client.index(
+        index='my_index',
+        body={'text': 'Countdown final'},
+        id=2,
+        refresh=True
+    )
     print("Document added successfully:", response['result'])
 
 except Exception as e:
