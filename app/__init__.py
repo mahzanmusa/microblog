@@ -25,6 +25,11 @@ moment = Moment()
 babel = Babel()
 
 
+def str_to_bool(s):
+    if isinstance(s, bool):
+        return s
+    return str(s).lower() in ('true', '1', 't')
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -56,9 +61,9 @@ def create_app(config_class=Config):
     app.opensearchpy = OpenSearch(
         hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
         http_compress=True,
-        use_ssl=False,     
-        verify_certs=False,
-        http_auth=None      
+        use_ssl=str_to_bool(app.config['OPENSEARCH_USE_SSL']),     
+        verify_certs=str_to_bool(app.config['OPENSEARCH_VERIFY_CERTS']),
+        http_auth=app.config['OPENSEARCH_HTTP_AUTH']      
         ) \
         if app.config['OPENSEARCH_URL'] else None
 

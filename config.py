@@ -28,3 +28,6 @@ class Config:
 
     OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL')
     OPENSEARCH_PORT = os.environ.get('OPENSEARCH_PORT')
+    OPENSEARCH_USE_SSL = os.environ.get('OPENSEARCH_USE_SSL')
+    OPENSEARCH_VERIFY_CERTS = os.environ.get('OPENSEARCH_VERIFY_CERTS')
+    OPENSEARCH_HTTP_AUTH = os.environ.get('OPENSEARCH_HTTP_AUTH')
