@@ -9,9 +9,8 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from config import Config
-#from redis import Redis
-#from celery import Celery
 from app.celery_utils import make_celery
+from opensearchpy import OpenSearch
 
 def get_locale():
     return request.accept_languages.best_match(current_app.config['LANGUAGES'])
@@ -49,14 +48,19 @@ def create_app(config_class=Config):
     from app.cli import bp as cli_bp
     app.register_blueprint(cli_bp)
 
-    #from app import tasks  # Import tasks to register them
-    #app.redis = Redis.from_url(app.config['CELERY_BROKER_URL'])
-    #app.task_queue = Celery('microblog-tasks', broker=app.redis)
-
     # Initialize Celery and attach it to the app
     celery = make_celery(app)
     app.extensions['celery'] = celery
     app.celery = celery
+   
+    app.opensearchpy = OpenSearch(
+        hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
+        http_compress=True,
+        use_ssl=False,     
+        verify_certs=False,
+        http_auth=None      
+        ) \
+        if app.config['OPENSEARCH_URL'] else None
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
