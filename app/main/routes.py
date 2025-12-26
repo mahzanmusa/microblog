@@ -1,16 +1,15 @@
 from datetime import datetime, timezone
-from flask import render_template, flash, redirect, url_for, request, g, current_app
+from flask import render_template, flash, redirect, url_for, request, g, current_app, abort
 from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 import sqlalchemy as sa
 from langdetect import detect, LangDetectException
 from app import db
-from app.main.forms import EditProfileForm, EmptyForm, PostForm, MessageForm
+from app.main.forms import EditProfileForm, EmptyForm, PostForm, MessageForm, SearchForm
 from app.models import User, Post, Message, Notification
 from app.translate import translate
 from app.main import bp
-from flask import g
-from app.main.forms import SearchForm
+
 
 @bp.before_app_request
 def before_request():
@@ -93,11 +92,13 @@ def edit_profile():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
+        current_user.email = form.email.data
         db.session.commit()
         flash(_('Your changes have been saved.'))
         return redirect(url_for('main.edit_profile'))
     elif request.method == 'GET':
         form.username.data = current_user.username
+        form.email.data = current_user.email
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title=_('Edit Profile'), form=form)
 
@@ -193,7 +194,29 @@ def messages():
     prev_url = url_for('main.messages', page=messages.prev_num) \
         if messages.has_prev else None
     
-    return render_template('messages.html', messages=messages.items, next_url=next_url, prev_url=prev_url)
+    form = EmptyForm()  # Instantiate form for the delete buttons
+    return render_template('messages.html', title='Messages', messages=messages.items, form=form, next_url=next_url, prev_url=prev_url)
+
+
+@bp.route('/delete_message/<int:id>', methods=['POST'])
+@login_required
+def delete_message(id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        # Retrieve the message or return 404
+        message = Message.query.get_or_404(id)
+        
+        # Security: Ensure only the sender or recipient can delete the message
+        if message.recipient != current_user and message.author != current_user:
+            abort(403)
+            
+        db.session.delete(message)
+        db.session.commit()
+        flash('Your message has been deleted.')
+    else:
+        flash('Invalid request.')
+        
+    return redirect(url_for('main.messages'))
 
 
 @bp.route('/notifications')
