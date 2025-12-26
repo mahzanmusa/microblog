@@ -13,6 +13,13 @@
     OPENSEARCH_VERIFY_CERTS=False
     OPENSEARCH_SERVICE=
 
+## .env file on AWS EC2
+    OPENSEARCH_URL=<your-opensearch-url>
+    OPENSEARCH_PORT=443
+    OPENSEARCH_USE_SSL=True
+    OPENSEARCH_VERIFY_CERTS=True
+    OPENSEARCH_SERVICE=aoss
+
 ## Reindex the Post table
     $ source venv/bin/activate
     (venv) $ flask shell
