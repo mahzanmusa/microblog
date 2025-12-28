@@ -16,6 +16,7 @@
                     username=user_link, when=moment(post.timestamp).fromNow()) }}
                 <br>
                 <span id="post{{ post.id }}">{{ post.body }}</span>
+
                 {% if post.language and post.language != g.locale %}
                 <br><br>
                 <span id="translation{{ post.id }}">
@@ -26,6 +27,22 @@
                                 '{{ g.locale }}');">{{ _('Translate') }}</a>
                 </span>
                 {% endif %}
+
+                {% if post.author == current_user %}
+                <div class="mt-2" style="display: flex">
+                    <button type="submit" value="Edit" style="border: 0; background: none;">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                    <form action="{{ url_for('main.delete_post', id=post.id) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" value="Delete" style="border: 0; background: none;" 
+                            onclick="return confirm('Are you sure you want to delete this post?');">
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+
             </td>
         </tr>
     </table>

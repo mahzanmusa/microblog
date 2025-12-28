@@ -30,7 +30,7 @@ def index():
             language = detect(form.post.data)
         except LangDetectException:
             language = ''
-        print('language detected:', language)
+        #print('language detected:', language)
         post = Post(body=form.post.data, author=current_user, language=language)
         db.session.add(post)
         db.session.commit()
@@ -46,8 +46,29 @@ def index():
     prev_url = url_for('main.index', page=posts.prev_num) \
         if posts.has_prev else None
     return render_template('index.html', title=_('Home'), form=form,
-                           posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
+                           posts=posts.items, next_url=next_url, prev_url=prev_url)
+
+
+@bp.route('/delete_post/<int:id>', methods=['POST'])
+@login_required
+def delete_post(id):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        # Retrieve the message or return 404
+        post = Post.query.get_or_404(id)
+        
+        # Security: Ensure only the author can delete the post
+        if post.author != current_user:
+            abort(403)
+            
+        db.session.delete(post)
+        db.session.commit()
+
+        flash('Your post has been deleted.')
+    else:
+        flash('Invalid request.')
+        
+    return redirect(url_for('main.index'))
 
 
 @bp.route('/explore')
@@ -62,9 +83,11 @@ def explore():
         if posts.has_next else None
     prev_url = url_for('main.explore', page=posts.prev_num) \
         if posts.has_prev else None
+    
+    form = EmptyForm()  # Instantiate form for the delete buttons
     return render_template('index.html', title=_('Explore'),
-                           posts=posts.items, next_url=next_url,
-                           prev_url=prev_url)
+                           posts=posts.items, form=form,
+                           next_url=next_url, prev_url=prev_url)
 
 
 @bp.route('/user/<username>')
@@ -251,5 +274,7 @@ def search():
         if total > page * current_app.config['POSTS_PER_PAGE'] else None
     prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
         if page > 1 else None
-    return render_template('search.html', title=_('Search'), posts=posts,
+
+    form = EmptyForm()  # Instantiate form for the delete buttons
+    return render_template('search.html', title=_('Search'), posts=posts, form=form,
                            next_url=next_url, prev_url=prev_url)
