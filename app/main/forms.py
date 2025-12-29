@@ -32,6 +32,14 @@ class PostForm(FlaskForm):
     post = TextAreaField(_l('Say something'), validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField(_l('Submit'))
 
+class EditPostForm(FlaskForm):
+    post = TextAreaField(_l('Say something'), validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField(_l('Save'))
+
+    def __init__(self, post_id, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.post_id = post_id
+
 
 class MessageForm(FlaskForm):
     message = TextAreaField(_l('Message'), validators=[DataRequired(), Length(min=0, max=140)])
