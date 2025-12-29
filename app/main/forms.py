@@ -35,6 +35,7 @@ class PostForm(FlaskForm):
 class EditPostForm(FlaskForm):
     post = TextAreaField(_l('Say something'), validators=[DataRequired(), Length(min=1, max=140)])
     submit = SubmitField(_l('Save'))
+    cancel = SubmitField(_l('Cancel'))
 
     def __init__(self, post_id, *args, **kwargs):
         super().__init__(*args, **kwargs)

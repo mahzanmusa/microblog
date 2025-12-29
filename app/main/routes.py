@@ -55,12 +55,16 @@ def edit_post(id):
     form = EditPostForm(id)
     # Retrieve the message or return 404
     post = Post.query.get_or_404(id)
+
     if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
-        current_user.email = form.email.data
-        db.session.commit()
-        flash(_('Your changes have been saved.'))
+
+        if form.submit.data:
+            post.body = form.post.data
+            db.session.commit()
+            flash(_('Your changes have been saved.'))
+        elif form.cancel.data:
+            pass
+
         return redirect(url_for('main.index'))
     elif request.method == 'GET':
         form.post.data = post.body
