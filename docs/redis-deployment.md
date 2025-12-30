@@ -1,6 +1,6 @@
 # Redis Deployment - For Message Queue
 
-## Create the Network
+## Create the Network (if not already)
     $ docker network create microblog-network
 
 ## Install OpenSearch Docker locally

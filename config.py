@@ -26,8 +26,8 @@ class Config:
     CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL') or 'redis://localhost:6379/0'
     CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND') or 'redis://localhost:6379/0'
 
-    OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL')
-    OPENSEARCH_PORT = os.environ.get('OPENSEARCH_PORT')
-    OPENSEARCH_USE_SSL = os.environ.get('OPENSEARCH_USE_SSL')
-    OPENSEARCH_VERIFY_CERTS = os.environ.get('OPENSEARCH_VERIFY_CERTS')
+    OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL') or 'localhost'
+    OPENSEARCH_PORT = os.environ.get('OPENSEARCH_PORT') or '9200'
+    OPENSEARCH_USE_SSL = os.environ.get('OPENSEARCH_USE_SSL') or 'False'
+    OPENSEARCH_VERIFY_CERTS = os.environ.get('OPENSEARCH_VERIFY_CERTS') or 'False'
     OPENSEARCH_SERVICE = os.environ.get('OPENSEARCH_SERVICE')
