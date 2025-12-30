@@ -56,8 +56,11 @@ def edit_post(id):
     # Retrieve the message or return 404
     post = Post.query.get_or_404(id)
 
-    if form.validate_on_submit():
+    # Security: Ensure only the author can edit the post
+    if post.author != current_user:
+        abort(404)
 
+    if form.validate_on_submit():
         if form.submit.data:
             post.body = form.post.data
             db.session.commit()
