@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
 
-
-class Config:
+class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'app.db')
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
@@ -31,3 +30,18 @@ class Config:
     OPENSEARCH_USE_SSL = os.environ.get('OPENSEARCH_USE_SSL') or 'False'
     OPENSEARCH_VERIFY_CERTS = os.environ.get('OPENSEARCH_VERIFY_CERTS') or 'False'
     OPENSEARCH_SERVICE = os.environ.get('OPENSEARCH_SERVICE')
+
+
+class ProductionConfig(Config):
+    # In production, we override the property to enforce strict checking
+    @property
+    def SECRET_KEY(self):
+        # 1. Attempt to get the key
+        key = os.environ.get('SECRET_KEY')
+        
+        # 2. Check explicitly if it exists
+        if not key:
+            # 3. CRITICAL: Stop the app immediately if missing
+            raise ValueError("CRITICAL: SECRET_KEY environment variable is not set. Application cannot start.")
+        
+        return key

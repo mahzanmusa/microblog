@@ -8,6 +8,7 @@
     $ cd microblog
 
 ## Create .env file
+    FLASK_ENV=production
     SECRET_KEY=<your-secret-key-for-forms>
     MAIL_SERVER=<your-smtp-server>
     MAIL_PORT=8025

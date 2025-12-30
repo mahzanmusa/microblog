@@ -8,7 +8,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
-from config import Config
+from config import Config, ProductionConfig
 from app.celery_utils import make_celery
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
@@ -30,8 +30,16 @@ def str_to_bool(s):
         return s
     return str(s).lower() in ('true', '1', 't')
 
-def create_app(config_class=Config):
+def create_app(config_class=None):
     app = Flask(__name__)
+
+    if not config_class:
+        # Determine config based on FLASK_ENV or similar variable
+        if os.environ.get('FLASK_ENV') == 'production':
+            config_class = ProductionConfig
+        else:
+            config_class = Config
+
     app.config.from_object(config_class)
 
     db.init_app(app)
@@ -89,15 +97,7 @@ def create_app(config_class=Config):
             connection_class=RequestsHttpConnection,
             timeout=60
         )
-   
-  #  app.opensearchpy = OpenSearch(
-   #     hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
-   #     http_compress=True,
-   #     use_ssl=str_to_bool(app.config['OPENSEARCH_USE_SSL']),     
-   #     verify_certs=str_to_bool(app.config['OPENSEARCH_VERIFY_CERTS']),
-   #     http_auth=app.config['OPENSEARCH_HTTP_AUTH']      
-   #     ) \
-   #     if app.config['OPENSEARCH_URL'] else None
+
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
