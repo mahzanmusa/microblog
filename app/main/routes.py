@@ -30,7 +30,7 @@ def index():
             language = detect(form.post.data)
         except LangDetectException:
             language = ''
-        #print('language detected:', language)
+
         post = Post(body=form.post.data, author=current_user, language=language)
         db.session.add(post)
         db.session.commit()
