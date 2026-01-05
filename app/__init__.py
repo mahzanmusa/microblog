@@ -10,7 +10,7 @@ from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from config import Config, ProductionConfig
 from app.celery_utils import make_celery
-from opensearchpy import OpenSearch, RequestsHttpConnection
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 
 def get_locale():
     return request.accept_languages.best_match(current_app.config['LANGUAGES'])
@@ -29,6 +29,49 @@ def str_to_bool(s):
     if isinstance(s, bool):
         return s
     return str(s).lower() in ('true', '1', 't')
+
+def init_opensearch(app):
+    """
+    Initializes OpenSearch client based on the environment:
+    1. AWS Serverless: Uses AWSV4SignerAuth
+    2. AWS ECS / Local: Uses Basic Auth (User/Pass)
+    3. No Auth: Defaults to None
+    """
+    if not app.config.get('OPENSEARCH_URL'):
+        return
+
+    auth = None
+    use_ssl = str_to_bool(app.config.get('OPENSEARCH_USE_SSL', True))
+    verify_certs = str_to_bool(app.config.get('OPENSEARCH_VERIFY_CERTS', True))
+
+    # STRATEGY 1: AWS Serverless (SigV4)
+    # Triggered if 'OPENSEARCH_SERVICE' is set (e.g., 'aoss' or 'es')
+    if app.config.get('OPENSEARCH_SERVICE'):
+        try:
+            import boto3
+            credentials = boto3.Session().get_credentials()
+            region = boto3.Session().region_name
+            auth = AWSV4SignerAuth(credentials, region, app.config['OPENSEARCH_SERVICE'])
+        except Exception as e:
+            app.logger.warning(f"Failed to setup AWS Auth: {e}")
+
+    # STRATEGY 2: Basic Auth (ECS or Local)
+    # Triggered if Username/Password are provided in config
+    elif app.config.get('OPENSEARCH_USERNAME') and app.config.get('OPENSEARCH_PASSWORD'):
+        auth = (app.config['OPENSEARCH_USERNAME'], app.config['OPENSEARCH_PASSWORD'])
+
+    # Initialize the Client
+    app.opensearchpy = OpenSearch(
+        hosts=[{
+            'host': app.config['OPENSEARCH_URL'],
+            'port': int(app.config.get('OPENSEARCH_PORT', 443))
+        }],
+        http_auth=auth,
+        use_ssl=use_ssl,
+        verify_certs=verify_certs,
+        connection_class=RequestsHttpConnection,
+        timeout=60
+    )
 
 def create_app(config_class=None):
     app = Flask(__name__)
@@ -61,11 +104,15 @@ def create_app(config_class=None):
     from app.cli import bp as cli_bp
     app.register_blueprint(cli_bp)
 
+    # Initialize OpenSearch
+    init_opensearch(app)
+    
     # Initialize Celery and attach it to the app
     celery = make_celery(app)
     app.extensions['celery'] = celery
     app.celery = celery
 
+    '''
     if app.config['OPENSEARCH_URL']:
         # 1. Default auth to None (Safe for local dev without auth)
         auth = None 
@@ -97,7 +144,7 @@ def create_app(config_class=None):
             connection_class=RequestsHttpConnection,
             timeout=60
         )
-
+        '''
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:

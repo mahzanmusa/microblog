@@ -16,7 +16,7 @@
     OPENSEARCH_VERIFY_CERTS=False
     OPENSEARCH_SERVICE=
 
-## .env file on AWS EC2
+## .env file on AWS OpenSearch Serverless
     OPENSEARCH_URL=<your-opensearch-url>
     OPENSEARCH_PORT=443
     OPENSEARCH_USE_SSL=True

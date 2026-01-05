@@ -35,6 +35,8 @@ class Config(object):
 
     OPENSEARCH_URL = os.environ.get('OPENSEARCH_URL') or 'localhost'
     OPENSEARCH_PORT = os.environ.get('OPENSEARCH_PORT') or '9200'
+    OPENSEARCH_USERNAME = os.environ.get('OPENSEARCH_USERNAME')
+    OPENSEARCH_PASSWORD = os.environ.get('OPENSEARCH_PASSWORD')
     OPENSEARCH_USE_SSL = os.environ.get('OPENSEARCH_USE_SSL') or 'False'
     OPENSEARCH_VERIFY_CERTS = os.environ.get('OPENSEARCH_VERIFY_CERTS') or 'False'
     OPENSEARCH_SERVICE = os.environ.get('OPENSEARCH_SERVICE')

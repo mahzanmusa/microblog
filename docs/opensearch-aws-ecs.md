@@ -69,3 +69,24 @@ Use `curl` with the `-k` flag (to ignore self-signed certs) and `-u` for authent
 
 ```bash
 curl -k -u admin:YourStrongPassword1! https://<PUBLIC_IP>:9200
+```
+
+---
+
+## 🛠️ .env File on your environment
+
+### .env file
+    OPENSEARCH_URL=<your-opensearch-url>
+    OPENSEARCH_PORT=9200
+    OPENSEARCH_USERNAME=<your-opensearch-username>
+    OPENSEARCH_PASSWORD=<your-opensearch-password>
+    OPENSEARCH_USE_SSL=True
+    OPENSEARCH_VERIFY_CERTS=False   # <--- Important for self-signed certs
+    OPENSEARCH_SERVICE=             # Leave empty to avoid triggering AWS SigV4
+
+### Reindex the Post table
+    $ source venv/bin/activate
+    (venv) $ flask shell
+    >>> from app.models import Post
+    >>> Post.reindex()
+    >>> exit()
