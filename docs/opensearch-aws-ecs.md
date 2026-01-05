@@ -81,8 +81,10 @@ curl -k -u admin:YourStrongPassword1! https://<PUBLIC_IP>:9200
     OPENSEARCH_USERNAME=<your-opensearch-username>
     OPENSEARCH_PASSWORD=<your-opensearch-password>
     OPENSEARCH_USE_SSL=True
-    OPENSEARCH_VERIFY_CERTS=False   # <--- Important for self-signed certs
-    OPENSEARCH_SERVICE=             # Leave empty to avoid triggering AWS SigV4
+    # Important for self-signed certs
+    OPENSEARCH_VERIFY_CERTS=False
+    # Leave below empty to avoid triggering AWS SigV4
+    OPENSEARCH_SERVICE=
 
 ### Reindex the Post table
     $ source venv/bin/activate

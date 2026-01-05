@@ -73,6 +73,10 @@ def init_opensearch(app):
         timeout=60
     )
 
+import urllib3
+# Suppress only the single warning from urllib3 needed.
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 def create_app(config_class=None):
     app = Flask(__name__)
 
@@ -111,40 +115,6 @@ def create_app(config_class=None):
     celery = make_celery(app)
     app.extensions['celery'] = celery
     app.celery = celery
-
-    '''
-    if app.config['OPENSEARCH_URL']:
-        # 1. Default auth to None (Safe for local dev without auth)
-        auth = None 
-        
-        # 2. Check if we are running in "AWS Mode"
-        # We check if OPENSEARCH_SERVICE is set (e.g., 'aoss' or 'es')
-        if app.config.get('OPENSEARCH_SERVICE'):
-            try:
-                # Only import boto3 if we actually need it
-                import boto3
-                from opensearchpy import AWSV4SignerAuth
-                
-                credentials = boto3.Session().get_credentials()
-                region = boto3.Session().region_name
-                service = app.config['OPENSEARCH_SERVICE']
-                
-                # Overwrite 'auth' with the AWS Signer
-                auth = AWSV4SignerAuth(credentials, region, service)
-            except Exception as e:
-                app.logger.warning(f"Failed to setup AWS Auth: {e}")
-                # auth remains None here, or you could raise an error
-
-        # 3. Initialize the Client
-        app.opensearchpy = OpenSearch(
-            hosts=[{'host': app.config['OPENSEARCH_URL'], 'port': app.config['OPENSEARCH_PORT']}],
-            http_auth=auth, # <--- Works if this is None OR AWSV4SignerAuth
-            use_ssl=str_to_bool(app.config['OPENSEARCH_USE_SSL']),     
-            verify_certs=str_to_bool(app.config['OPENSEARCH_VERIFY_CERTS']),
-            connection_class=RequestsHttpConnection,
-            timeout=60
-        )
-        '''
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
