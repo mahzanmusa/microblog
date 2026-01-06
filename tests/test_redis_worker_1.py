@@ -1,6 +1,7 @@
 import sys
 import os
-from types import ModuleType
+#from types import ModuleType
+from celery import Celery
 
 # --- 1. SETUP PATHS (So we can find config.py) ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -13,23 +14,22 @@ sys.path.insert(0, parent_dir)
 # it will find this fake instead of loading the real file.
 
 # A. Create a dummy 'app' package so Python doesn't complain
-mock_app = ModuleType('app')
-sys.modules['app'] = mock_app
+#mock_app = ModuleType('app')
+#sys.modules['app'] = mock_app
 
 # B. Create a dummy 'app.aws_utils' module
-mock_utils = ModuleType('app.aws_utils')
+#mock_utils = ModuleType('app.aws_utils')
 
 # C. Add the specific function config.py needs.
 # We make it return None, which simulates "Local/Offline" mode perfectly.
-mock_utils.get_fargate_public_ip = lambda *args, **kwargs: None
+#mock_utils.get_fargate_public_ip = lambda *args, **kwargs: None
 
 # D. Register it
-sys.modules['app.aws_utils'] = mock_utils
+#sys.modules['app.aws_utils'] = mock_utils
 
 # --- 3. NOW IMPORT CONFIG ---
 # This will now work because it uses the mock above!
 from config import Config 
-from celery import Celery
 
 # COMMAND TO RUN: python -m celery -A test_redis_worker_1 worker --loglevel=info --pool=solo
 
