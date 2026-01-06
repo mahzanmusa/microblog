@@ -77,8 +77,9 @@ Use Environment Variables to manage connections. This allows code to run locally
 **File:** `.env` (Do not commit to GitHub!)
 ```ini
 # For Local Testing (Use the Task's Public IP)
-CELERY_BROKER_URL = redis://:<your-password>@<your-redis-ip>:6379/0
-CELERY_RESULT_BACKEND = redis://:<your-password>@<your-redis-ip>:6379/1
+REDIS_URL=AUTO or <your-redis-ip>
+REDIS_PASSWORD=<your-password>
+REDIS_PORT=6379
 
 # For Production/ECS (Use the Service Discovery Name)
 # REDIS_HOST=redis.dev.local

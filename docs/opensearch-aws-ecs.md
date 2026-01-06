@@ -71,6 +71,10 @@ Use `curl` with the `-k` flag (to ignore self-signed certs) and `-u` for authent
 curl -k -u admin:YourStrongPassword1! https://<PUBLIC_IP>:9200
 ```
 
+### 2. Setup local environment
+Permissions: Your laptop must be logged into AWS (via ```aws configure```) with a user that has permission to "read" ECS and EC2 data.
+* Required Policy: ```AmazonECS_FullAccess``` (or ReadOnly) and ```AmazonEC2ReadOnlyAccess```.
+
 ---
 
 ## 🛠️ .env File on your environment
