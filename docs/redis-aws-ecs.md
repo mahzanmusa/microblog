@@ -85,7 +85,7 @@ REDIS_PORT=6379
 # REDIS_HOST=redis.dev.local
 ```
 
-1.  Start the Worker (Terminal 1) Windows users must use --pool=solo
+1.  Start the Worker (Terminal 1). Windows users must use --pool=solo
 ```
 cd tests
 python -m celery -A test_redis_worker_1 worker --loglevel=info --pool=solo
