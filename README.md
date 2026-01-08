@@ -157,19 +157,32 @@ Update requirements.txt file (if there's any changes)
 ## Add environment file .env
     SECRET_KEY=a-really-long-and-unique-key-that-nobody-knows
     MAIL_SERVER=<your-smtp-server>
-    MAIL_PORT=8025
+    MAIL_PORT=<your-smtp-port>
+    MAIL_USE_SSL=<true-or-false>
+    MAIL_USERNAME=<your-username>
+    MAIL_PASSWORD=<your-password>
+    ADMINS=<admin-email-address>
+    DATABASE_URL=<your-database-url-or-empty>
+    
     MS_TRANSLATOR_KEY=<your-azure-translator-key>
     MS_TRANSLATOR_REGION=<your-azure-region>
     AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
     AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
     AWS_DEFAULT_REGION=<your-aws-region>
-    CELERY_BROKER_URL=<message-broker-url>
-    CELERY_RESULT_BACKEND=<message-broker-backend>
-    OPENSEARCH_URL=<your-opensearch-url>
+
+    OPENSEARCH_URL=<AUTO-or-your-opensearch-url>
     OPENSEARCH_PORT=<9200-or-443>
+    OPENSEARCH_USERNAME=<opensearch-username>
+    OPENSEARCH_PASSWORD=<opensearch-password>
     OPENSEARCH_USE_SSL=True
-    OPENSEARCH_VERIFY_CERTS=True
-    OPENSEARCH_SERVICE=aoss
+    # False for self-signed certs
+    OPENSEARCH_VERIFY_CERTS=False
+    # Leave below empty to avoid triggering AWS SigV4
+    OPENSEARCH_SERVICE=<aoss-or-empty>
+
+    REDIS_URL=<AUTO-or-your-redis-url>
+    REDIS_PASSWORD=<redis-password>
+    REDIS_PORT=6379
 
 ## Unit Tests
     python -m unittest tests/test_general.py
