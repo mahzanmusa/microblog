@@ -8,7 +8,6 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
-from config import Config, ProductionConfig
 from app.celery_utils import make_celery
 from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 
@@ -79,6 +78,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def create_app(config_class=None):
     app = Flask(__name__)
+
+    from config import Config, ProductionConfig
 
     if not config_class:
         # Determine config based on FLASK_ENV or similar variable
